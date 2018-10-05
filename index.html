@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Small test task</title>
+</head>
+<body>
+	<div id='root'>
+		<div id='container'>
+			<button onclick='getList()'>Get List</button>
+			<div id='info'></div>
+		</div>
+	</div>
+	<script>
+	var listOfTitles = JSON.parse(localStorage.getItem('listOfTitles'));
+	if(listOfTitles) {
+		insertElements(listOfTitles)
+	}
+	function getList () {
+		const dataJSON1 = JSON.parse(getDataFromURL('https://raw.githubusercontent.com/hillel-front-end/front-end-plus/master/test/data_1.json'));
+		const dataJSON2 = JSON.parse(getDataFromURL('https://raw.githubusercontent.com/hillel-front-end/front-end-plus/master/test/data_2.json'));
+		const data1 = Object.values(dataJSON1.data.list)
+		const data2 = Object.values(dataJSON2.data.list)
+		const resultList = [...data1, ...data2];
+		insertElements(resultList)
+		storeToStorage(resultList)
+	}
+
+	function getDataFromURL(url){
+    	var request = new XMLHttpRequest();
+    	request.open('GET', url, false);
+    	request.send(null);
+    	return request.responseText;          
+	}
+
+	function insertElements(listOfData) {
+		listOfData.forEach((item) => {
+			var newEl = document.createElement('div')
+  			newEl.innerHTML = item.title
+			document.getElementById('info').appendChild(newEl).classList.add('listItem')
+		})
+	}
+	function storeToStorage (list) {
+		localStorage.setItem("listOfTitles", JSON.stringify(list));
+	}
+</script>
+<style>
+.listItem {
+	margin: 10px;
+	padding: 5px;
+	width: 100px;
+	height: 20px;
+	border: 1px dashed red;
+	border-radius: 5px;
+}
+</style>
+</body>
+</html>
